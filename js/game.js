@@ -94,6 +94,11 @@
       enemies.add(game.add.sprite(randomX, -24, GFX, 0));
     }
   }
+
+  function handlePlayerHit() {
+    gameOver();
+  };
+
   function handleCollisions() {
     // check if any bullets touch any enemies
     let enemiesHit = enemies.children
@@ -112,6 +117,14 @@
 
       enemiesHit.forEach(destroyEnemy);
     }
+    enemiesHit = enemies.children
+      .filter(enemy => enemy.overlap(player));
+
+    if (enemiesHit.length) {
+      handlePlayerHit();
+
+      enemiesHit.forEach(destroyEnemy);
+    }
   };
 
   function cleanup() {
@@ -127,5 +140,10 @@
   function destroyEnemy(enemy) {
     enemy.kill();
   }
+
+  function gameOver() {
+    game.state.destroy();
+    game.add.text(90, 200, 'YOUR HEAD ASPLODE', { fill: '#FFFFFF' });
+  };
 
 })(window.Phaser);
